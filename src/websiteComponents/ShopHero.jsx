@@ -6,7 +6,7 @@ const ShopHero = () => {
   return (
     <Box
       w="100%" h="316px"
-      bgImage="url('/src/assets/Rectangle 1.png')" 
+      bgImage="url('/src/assets/Rectangle.png')" 
       bgSize="cover" bgPosition="center"
       position="relative" display="flex"
       alignItems="center" justifyContent="center"

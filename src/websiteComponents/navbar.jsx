@@ -9,11 +9,12 @@ import {
   Image,
   Input,
   Text,
-  VStack,
   Spinner,
+  Circle,
 } from "@chakra-ui/react";
 
-// Standard Chakra v3 Dialog Imports
+import { useSelector } from "react-redux";
+
 import {
   DialogBody,
   DialogContent,
@@ -40,7 +41,12 @@ const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Search Logic: Fetches from DummyJSON API
+  const cartItems = useSelector((state) => state.cart.items);
+  const wishlistItems = useSelector((state) => state.cart.wishlist);
+
+  const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const wishlistCount = wishlistItems.length;
+
   useEffect(() => {
     if (searchQuery.length < 2) {
       setResults([]);
@@ -71,12 +77,27 @@ const Navbar = () => {
     navigate(`/product/${id}`);
   };
 
-  // Reusable hover style for all icons
   const iconHoverStyle = {
     bg: "transparent",
     color: "#B88E2F",
     transform: "scale(1.1)",
   };
+
+  const Badge = ({ count, color }) => (
+    <Circle
+      position="absolute"
+      top="-2px"
+      right="-2px"
+      bg={color}
+      color="white"
+      size="18px"
+      fontSize="11px"
+      fontWeight="bold"
+      zIndex="1"
+    >
+      {count}
+    </Circle>
+  );
 
   return (
     <Box 
@@ -91,7 +112,7 @@ const Navbar = () => {
       <Container maxW="full">
         <Flex align="center" justify="space-between">
           
-          {/* --- LOGO --- */}
+          {/* --- LOGO (FIXED TAGS HERE) --- */}
           <RouterLink to="/">
             <HStack spacing={2} align="center">
               <Image 
@@ -136,7 +157,6 @@ const Navbar = () => {
           {/* --- ACTION ICONS --- */}
           <HStack spacing="25px">
             
-            {/* Account Icon */}
             <IconButton 
               variant="ghost" 
               color="black" 
@@ -161,9 +181,7 @@ const Navbar = () => {
                   <MdSearch size="28px" />
                 </IconButton>
               </DialogTrigger>
-              
               <DialogBackdrop />
-              
               <DialogContent borderRadius="15px" mt="100px" bg="white" boxShadow="2xl">
                 <DialogHeader borderBottom="1px solid #eee" p={4}>
                   <HStack>
@@ -174,20 +192,16 @@ const Navbar = () => {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       _focus={{ boxShadow: "none" }}
-                      
-                      
                     />
                     <DialogCloseTrigger position="static">
                        <MdClose size="20px" />
                     </DialogCloseTrigger>
                   </HStack>
                 </DialogHeader>
-                
                 <DialogBody p={0}>
                   {isLoading && (
                     <Flex justify="center" p={8}><Spinner color="#B88E2F" /></Flex>
                   )}
-                  
                   {!isLoading && results.map((product) => (
                     <HStack 
                       key={product.id} 
@@ -212,39 +226,42 @@ const Navbar = () => {
                       </Text>
                     </HStack>
                   ))}
-                  
-                  {!isLoading && searchQuery.length >= 2 && results.length === 0 && (
-                    <Box p={6} textAlign="center">
-                      <Text color="gray.500">No results found for "{searchQuery}"</Text>
-                    </Box>
-                  )}
                 </DialogBody>
               </DialogContent>
             </DialogRoot>
 
-            {/* Wishlist Icon */}
-            <IconButton 
-              variant="ghost" 
-              color="black" 
-              bg="transparent"
-              transition="0.3s"
-              _hover={iconHoverStyle}
-            >
-              <MdFavoriteBorder size="28px" />
-            </IconButton>
+            {/* --- WISHLIST ICON --- */}
+            <Box position="relative">
+              <IconButton 
+                as={RouterLink}
+                to="/wishlist"
+                variant="ghost" 
+                color="black" 
+                bg="transparent"
+                transition="0.3s"
+                _hover={iconHoverStyle}
+              >
+                <MdFavoriteBorder size="28px" />
+              </IconButton>
+              {wishlistCount > 0 && <Badge count={wishlistCount} color="red.500" />}
+            </Box>
 
-            {/* Cart Icon */}
-            <IconButton 
-              as={RouterLink} 
-              to="/cart" 
-              variant="ghost" 
-              color="black" 
-              bg="transparent"
-              transition="0.3s"
-              _hover={iconHoverStyle}
-            >
-              <MdOutlineShoppingCart size="28px" />
-            </IconButton>
+            {/* --- CART ICON --- */}
+            <Box position="relative">
+              <IconButton 
+                as={RouterLink} 
+                to="/cart" 
+                variant="ghost" 
+                color="black" 
+                bg="transparent"
+                transition="0.3s"
+                _hover={iconHoverStyle}
+              >
+                <MdOutlineShoppingCart size="28px" />
+              </IconButton>
+              {cartCount > 0 && <Badge count={cartCount} color="#B88E2F" />}
+            </Box>
+
           </HStack>
         </Flex>
       </Container>
