@@ -1,152 +1,101 @@
 import React, { useState, useEffect } from "react";
 import {
-  Box,
-  Flex,
-  Heading,
-  HStack,
-  Container,
-  IconButton,
-  Image,
-  Input,
-  Text,
-  Spinner,
-  Circle,
+  Box, Flex, Heading, HStack, Container, IconButton, Image, Input, Text, Spinner, Circle, VStack, Center, Separator,
 } from "@chakra-ui/react";
-
 import { useSelector } from "react-redux";
-
-import {
-  DialogBody,
-  DialogContent,
-  DialogHeader,
-  DialogRoot,
-  DialogTrigger,
-  DialogBackdrop,
-  DialogCloseTrigger,
-} from "@/components/ui/dialog"; 
-
-import {
-  MdPersonOutline,
-  MdSearch,
-  MdFavoriteBorder,
-  MdOutlineShoppingCart,
-  MdClose,
-} from "react-icons/md";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
+// Icons
+import { MdPersonOutline, MdSearch, MdFavoriteBorder, MdOutlineShoppingCart, MdClose, MdMenu } from "react-icons/md";
+
+// UI Components
+import {
+  DialogBody, DialogContent, DialogHeader, DialogRoot, DialogTrigger, DialogBackdrop, DialogCloseTrigger,
+} from "@/components/ui/dialog";
+
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
   const [searchQuery, setSearchQuery] = useState("");
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  
   const navigate = useNavigate();
-
   const cartItems = useSelector((state) => state.cart.items);
-  const wishlistItems = useSelector((state) => state.cart.wishlist);
+  const wishlistItems = useSelector((state) => state.cart.wishlist) || [];
 
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
   const wishlistCount = wishlistItems.length;
 
   useEffect(() => {
-    if (searchQuery.length < 2) {
-      setResults([]);
-      return;
-    }
-
+    if (searchQuery.trim().length < 2) { setResults([]); return; }
     const delayDebounceFn = setTimeout(async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(
-          `https://dummyjson.com/products/search?q=${searchQuery}&limit=5`
-        );
+        const response = await fetch(`https://dummyjson.com/products/search?q=${searchQuery}&limit=5`);
         const data = await response.json();
         setResults(data.products);
-      } catch (error) {
-        console.error("Search error:", error);
-      } finally {
-        setIsLoading(false);
-      }
+      } catch (e) { console.error("Search failed", e); } finally { setIsLoading(false); }
     }, 400);
-
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery]);
 
-  const handleProductClick = (id) => {
-    setIsOpen(false);
-    setSearchQuery("");
-    navigate(`/product/${id}`);
-  };
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "Shop", path: "/shop" },
+    { name: "About", path: "/about" },
+    { name: "Contact", path: "/contact" }
+  ];
 
+  // Hover style helper to prevent the black background
   const iconHoverStyle = {
-    bg: "transparent",
+    bg: "transparent", // Fixes the black background issue
     color: "#B88E2F",
     transform: "scale(1.1)",
+    transition: "0.2s"
   };
 
-  const Badge = ({ count, color }) => (
-    <Circle
-      position="absolute"
-      top="-2px"
-      right="-2px"
-      bg={color}
-      color="white"
-      size="18px"
-      fontSize="11px"
-      fontWeight="bold"
-      zIndex="1"
-    >
-      {count}
-    </Circle>
-  );
-
   return (
-    <Box 
-      as="nav" 
-      bg="white" 
-      py="25px" 
-      position="sticky" 
-      top="0" 
-      zIndex="1000" 
-      boxShadow="sm"
-    >
-      <Container maxW="full">
+    <Box as="nav" bg="white" py={{ base: "12px", md: "25px" }} position="sticky" top="0" zIndex="1000" boxShadow="sm">
+      <Container maxW="1440px" px={{ base: "10px", md: "25px" }}>
         <Flex align="center" justify="space-between">
           
-          {/* --- LOGO (FIXED TAGS HERE) --- */}
-          <RouterLink to="/">
-            <HStack spacing={2} align="center">
-              <Image 
-                src="/src/assets/Meubel House_Logos-05.png" 
-                alt="Logo" 
-                h="32px" 
-                w="auto" 
-              />
-              <Heading fontSize="30px" fontWeight="700" color="black">
-                Furniro
-              </Heading>
-            </HStack>
-          </RouterLink>
+          <HStack spacing={{ base: "4px", md: "15px" }}>
+            <IconButton
+              display={{ base: "flex", md: "none" }}
+              variant="ghost"
+              color="black"
+              onClick={() => setIsSidebarOpen(true)}
+              aria-label="Open Menu"
+              _hover={{ bg: "transparent", color: "#B88E2F" }}
+              p={0}
+            >
+              <MdMenu size="26px" />
+            </IconButton>
 
-          {/* --- NAVIGATION LINKS --- */}
-          <HStack 
-            as="ul" 
-            listStyleType="none" 
-            gap="50px" 
-            display={{ base: "none", md: "flex" }}
-          >
-            {[
-              { name: "Home", path: "/" }, 
-              { name: "Shop", path: "/shop" }, 
-              { name: "About", path: "/about" }, 
-              { name: "Contact", path: "/contact" }
-            ].map((link) => (
+            <RouterLink to="/">
+              <HStack spacing={2} align="center">
+                <Image src="/src/assets/Meubel House_Logos-05.png" alt="Logo" h={{ base: "24px", md: "32px" }} />
+                <Heading 
+                  display={{ base: "none", md: "block" }} 
+                  fontSize="30px" 
+                  fontWeight="700" 
+                  color="black"
+                >
+                  Furniro
+                </Heading>
+              </HStack>
+            </RouterLink>
+          </HStack>
+
+          <HStack as="ul" listStyleType="none" gap="50px" display={{ base: "none", md: "flex" }}>
+            {navLinks.map((link) => (
               <Box 
                 as={RouterLink} 
                 to={link.path} 
                 key={link.name} 
                 fontWeight="500" 
-                color="black"
-                transition="0.3s"
+                color="black" 
                 _hover={{ color: "#B88E2F", textDecoration: "none" }}
               >
                 {link.name}
@@ -154,117 +103,98 @@ const Navbar = () => {
             ))}
           </HStack>
 
-          {/* --- ACTION ICONS --- */}
-          <HStack spacing="25px">
+          <HStack spacing={{ base: "2px", md: "20px" }}>
             
             <IconButton 
-              variant="ghost" 
-              color="black" 
-              bg="transparent"
-              transition="0.3s"
-              _hover={iconHoverStyle}
+               as={RouterLink} to="/login" 
+               variant="ghost" color="black" 
+               p={{ base: "4px", md: "8px" }}
+               _hover={iconHoverStyle}
             >
               <MdPersonOutline size="28px" />
             </IconButton>
 
-            {/* SEARCH DIALOG */}
-            <DialogRoot open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
+            <DialogRoot open={isSearchOpen} onOpenChange={(e) => setIsSearchOpen(e.open)}>
               <DialogTrigger asChild>
-                <IconButton 
-                  variant="ghost" 
-                  color="black" 
-                  bg="transparent"
-                  aria-label="Search"
-                  transition="0.3s"
-                  _hover={iconHoverStyle}
-                >
+                <IconButton variant="ghost" color="black" p={{ base: "4px", md: "8px" }} _hover={iconHoverStyle}>
                   <MdSearch size="28px" />
                 </IconButton>
               </DialogTrigger>
               <DialogBackdrop />
               <DialogContent borderRadius="15px" mt="100px" bg="white" boxShadow="2xl">
                 <DialogHeader borderBottom="1px solid #eee" p={4}>
-                  <HStack>
+                  <HStack w="100%">
                     <MdSearch color="#B88E2F" size="24px" />
-                    <Input
-                      placeholder="Search for furniture..."
-                      variant="plain"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      _focus={{ boxShadow: "none" }}
-                    />
-                    <DialogCloseTrigger position="static">
-                       <MdClose size="20px" />
-                    </DialogCloseTrigger>
+                    <Input placeholder="Search for furniture..." variant="plain" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                    <DialogCloseTrigger position="static"><MdClose size="20px" /></DialogCloseTrigger>
                   </HStack>
                 </DialogHeader>
-                <DialogBody p={0}>
-                  {isLoading && (
-                    <Flex justify="center" p={8}><Spinner color="#B88E2F" /></Flex>
-                  )}
-                  {!isLoading && results.map((product) => (
-                    <HStack 
-                      key={product.id} 
-                      p={4} 
-                      _hover={{ bg: "#F9F1E7" }} 
-                      cursor="pointer" 
-                      onClick={() => handleProductClick(product.id)}
-                      transition="0.2s"
-                    >
-                      <Image 
-                        src={product.thumbnail} 
-                        boxSize="50px" 
-                        borderRadius="8px" 
-                        objectFit="cover" 
-                      />
+                <DialogBody p={0} maxH="400px" overflowY="auto">
+                  {isLoading && <Center p={8}><Spinner color="#B88E2F" /></Center>}
+                  {results.map((product) => (
+                    <HStack key={product.id} p={4} _hover={{ bg: "#F9F1E7" }} cursor="pointer" onClick={() => { navigate(`/product/${product.id}`); setIsSearchOpen(false); }}>
+                      <Image src={product.thumbnail} boxSize="45px" borderRadius="6px" objectFit="cover" />
                       <Box flex={1}>
-                        <Text fontWeight="600" color="black">{product.title}</Text>
+                        <Text fontWeight="600" color="black" fontSize="14px">{product.title}</Text>
                         <Text fontSize="12px" color="gray.500">{product.category}</Text>
                       </Box>
-                      <Text fontWeight="600" color="#B88E2F">
-                        Rp {(product.price * 1000).toLocaleString()}
-                      </Text>
+                      <Text fontWeight="700" color="#B88E2F">Rs. {product.price}</Text>
                     </HStack>
                   ))}
                 </DialogBody>
               </DialogContent>
             </DialogRoot>
 
-            {/* --- WISHLIST ICON --- */}
             <Box position="relative">
-              <IconButton 
-                as={RouterLink}
-                to="/wishlist"
-                variant="ghost" 
-                color="black" 
-                bg="transparent"
-                transition="0.3s"
-                _hover={iconHoverStyle}
-              >
+              <IconButton as={RouterLink} to="/wishlist" variant="ghost" color="black" p={{ base: "4px", md: "8px" }} _hover={iconHoverStyle}>
                 <MdFavoriteBorder size="28px" />
               </IconButton>
-              {wishlistCount > 0 && <Badge count={wishlistCount} color="red.500" />}
+              {wishlistCount > 0 && (
+                <Circle position="absolute" top={{ base: "2px", md: "5px" }} right={{ base: "2px", md: "5px" }} bg="red.500" color="white" size="16px" fontSize="10px" fontWeight="bold">
+                  {wishlistCount}
+                </Circle>
+              )}
             </Box>
 
-            {/* --- CART ICON --- */}
             <Box position="relative">
-              <IconButton 
-                as={RouterLink} 
-                to="/cart" 
-                variant="ghost" 
-                color="black" 
-                bg="transparent"
-                transition="0.3s"
-                _hover={iconHoverStyle}
-              >
+              <IconButton as={RouterLink} to="/cart" variant="ghost" color="black" p={{ base: "4px", md: "8px" }} _hover={iconHoverStyle}>
                 <MdOutlineShoppingCart size="28px" />
               </IconButton>
-              {cartCount > 0 && <Badge count={cartCount} color="#B88E2F" />}
+              {cartCount > 0 && (
+                <Circle position="absolute" top={{ base: "2px", md: "5px" }} right={{ base: "2px", md: "5px" }} bg="#B88E2F" color="white" size="16px" fontSize="10px" fontWeight="bold">
+                  {cartCount}
+                </Circle>
+              )}
             </Box>
-
           </HStack>
         </Flex>
       </Container>
+
+      {/* --- MOBILE SIDEBAR DRAWER --- */}
+      {isSidebarOpen && (
+        <>
+          <Box position="fixed" top="0" left="0" w="100vw" h="100vh" bg="blackAlpha.700" zIndex="1100" onClick={() => setIsSidebarOpen(false)} />
+          <Box position="fixed" top="0" left="0" w="280px" h="100vh" bg="white" zIndex="1200" p={6} boxShadow="2xl" animation="slideIn 0.3s ease-out">
+            <VStack align="stretch" spacing={8}>
+              <Flex justify="space-between" align="center">
+                <HStack>
+                  <Image src="/src/assets/Meubel House_Logos-05.png" h="24px" />
+                  <Heading fontSize="22px" color="black">Furniro</Heading>
+                </HStack>
+                <IconButton variant="ghost" _hover={{ bg: "transparent", color: "#B88E2F" }} onClick={() => setIsSidebarOpen(false)}><MdClose size="28px" /></IconButton>
+              </Flex>
+              <Separator />
+              <VStack align="start" spacing={6} pl={2}>
+                {navLinks.map((link) => (
+                  <Box as={RouterLink} to={link.path} key={link.name} fontSize="18px" fontWeight="500" color="black" w="100%" onClick={() => setIsSidebarOpen(false)} _hover={{ color: "#B88E2F" }}>
+                    {link.name}
+                  </Box>
+                ))}
+              </VStack>
+            </VStack>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };

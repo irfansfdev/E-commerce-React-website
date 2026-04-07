@@ -13,7 +13,8 @@ import {
   Spinner,
   HStack,
   VStack,
-  Icon, // Added this back!
+  Icon,
+  Flex, // <--- Add this!
 } from "@chakra-ui/react";
 import { MdShare, MdCompareArrows, MdFavoriteBorder } from "react-icons/md";
 
@@ -158,8 +159,14 @@ const ShopProductGrid = ({ sortType, productsPerPage, category }) => {
       </SimpleGrid>
 
       {/* --- PAGINATION --- */}
-      <Center mt="60px">
-        <HStack spacing={4}>
+      <Center mt="60px" w="100%">
+        <Flex 
+          gap={4} 
+          wrap="wrap" 
+          justify="center" 
+          maxW="100%"
+          px="10px"
+        >
           {[...Array(totalPages)].map((_, i) => (
             <Button
               key={i}
@@ -170,15 +177,37 @@ const ShopProductGrid = ({ sortType, productsPerPage, category }) => {
               bg={currentPage === i + 1 ? "#B88E2F" : "#F9F1E7"}
               color={currentPage === i + 1 ? "white" : "black"}
               borderRadius="10px"
-              w="55px"
-              h="55px"
-              fontSize="18px"
+              // Responsive sizing for the circles
+              w={{ base: "45px", md: "55px" }}
+              h={{ base: "45px", md: "55px" }}
+              fontSize={{ base: "14px", md: "18px" }}
+              flexShrink={0} // Prevents buttons from squashing
               _hover={{ bg: "#B88E2F", color: "white" }}
             >
               {i + 1}
             </Button>
           ))}
-        </HStack>
+          
+          {/* Optional "Next" button that matches the design */}
+          {currentPage < totalPages && (
+            <Button
+              onClick={() => {
+                setCurrentPage(currentPage + 1);
+                window.scrollTo({ top: 400, behavior: "smooth" });
+              }}
+              bg="#F9F1E7"
+              color="black"
+              borderRadius="10px"
+              h={{ base: "45px", md: "55px" }}
+              px={{ base: "20px", md: "30px" }}
+              fontSize={{ base: "14px", md: "18px" }}
+              fontWeight="300"
+              _hover={{ bg: "#B88E2F", color: "white" }}
+            >
+              Next
+            </Button>
+          )}
+        </Flex>
       </Center>
     </Container>
   );

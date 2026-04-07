@@ -5,77 +5,95 @@ import {
   Flex,
   HStack,
   Text,
-  Icon,
 } from "@chakra-ui/react";
-import {
-  MdOutlineFilterList,
-} from "react-icons/md";
+import { MdOutlineFilterList } from "react-icons/md";
+import { BsGridFill, BsList } from "react-icons/bs";
 
 const ShopFilterBar = ({
-  totalResults,
-  productsPerPage,
+  totalResults = 0,
+  productsPerPage = 16,
   setProductsPerPage,
   setSortType,
   setCategory,
-  categories,
+  categories = [],
 }) => {
+  
+  const selectStyle = {
+    backgroundColor: "white",
+    height: "55px",
+    padding: "0 10px",
+    fontSize: "16px",
+    color: "#727272",
+    border: "none",
+    outline: "none",
+    cursor: "pointer",
+    borderRadius: "0",
+    appearance: "none",
+    WebkitAppearance: "none",
+  };
+
   return (
-    <Box bg="#F9F1E7" py="25px" w="100%">
-      <Container maxW="1280px">
+    <Box bg="#F9F1E7" py={{ base: "20px", md: "15px" }} w="100%" overflow="hidden">
+      <Container maxW="1280px" px={{ base: "10px", md: "20px" }}>
         <Flex
           justify="space-between"
           align="center"
-          direction={{ base: "column", md: "row" }}
+          // Stacks the two groups on mobile, keeps them side-by-side on desktop
+          direction={{ base: "column", lg: "row" }}
           gap={6}
         >
-          <HStack spacing={6}>
-            <HStack cursor="pointer">
-              <Icon as={MdOutlineFilterList} boxSize={6} color="black" />
-              <Text fontSize="20px" fontWeight="500" color="black">
-                Filter
-              </Text>
+          
+          {/* LEFT GROUP: Filter, Icons, Category, Results */}
+          <Flex 
+            align="center" 
+            gap={{ base: 3, md: 6 }} 
+            justify={{ base: "center", lg: "flex-start" }}
+            w={{ base: "100%", lg: "auto" }}
+            wrap="wrap"
+          >
+            <HStack spacing={{ base: 3, md: 5 }}>
+              <HStack cursor="pointer" color="black">
+                <MdOutlineFilterList size="24px" />
+                <Text fontSize={{ base: "16px", md: "20px" }}>Filter</Text>
+              </HStack>
+              <HStack spacing={4} color="black" display={{ base: "none", sm: "flex" }}>
+                <BsGridFill size="18px" />
+                <BsList size="22px" />
+              </HStack>
             </HStack>
 
-            {/* --- NATIVE SELECT FOR CATEGORY --- */}
-            <select
-              style={{
-                background: "#B88E2F",
-                fontWeight: "500",
-                fontSize: "16px",
-                border: "none",
-                outline: "none",
-                cursor: "pointer",
-                height: "45px",
-                width: "170px",
-              }}
+            <Box h="30px" w="2px" bg="#9F9F9F" display={{ base: "none", sm: "block" }} />
+
+            <select 
+              style={{ ...selectStyle, width: "130px", fontWeight: "500" }}
               onChange={(e) => setCategory(e.target.value)}
             >
-              <option value="all">All Categories</option>
-              {categories && categories.map((cat) => (
-                <option key={cat.slug} value={cat.slug}>
-                  {cat.name}
+              <option value="all">All Category</option>
+              {categories?.map((cat) => (
+                <option key={cat.slug || cat} value={cat.slug || cat}>
+                  {cat.name || cat}
                 </option>
               ))}
             </select>
 
-            <Box h="30px" w="2px" bg="#9F9F9F" mx={4} />
-            <Text fontSize="16px" color="black">
-              Showing 1–{productsPerPage} of {totalResults} results
-            </Text>
-          </HStack>
+            <Box h="30px" w="2px" bg="#9F9F9F" display={{ base: "none", md: "block" }} />
 
-          <HStack spacing={6}>
-            <HStack>
-              <Text fontSize="20px" color="black">Show</Text>
-              {/* --- NATIVE SELECT FOR SHOW --- */}
-              <select
-                style={{
-                  background: "#B88E2F",
-                  height: "45px",
-                  width: "70px",
-                  textAlign: "center",
-                  border: "none"
-                }}
+            <Text fontSize={{ base: "14px", md: "16px" }} color="black" whiteSpace="nowrap">
+              Showing 1–{Math.min(productsPerPage, totalResults)} of {totalResults} results
+            </Text>
+          </Flex>
+
+          {/* RIGHT GROUP: Show and Sort */}
+          <Flex 
+            gap={{ base: 4, md: 6 }} 
+            align="center" 
+            justify="center"
+            w={{ base: "100%", lg: "auto" }}
+          >
+            <HStack spacing={3}>
+              <Text fontSize={{ base: "16px", md: "18px" }} color="black">Show</Text>
+              <select 
+                style={{ ...selectStyle, width: "55px", textAlign: "center" }}
                 value={productsPerPage}
                 onChange={(e) => setProductsPerPage(Number(e.target.value))}
               >
@@ -85,26 +103,21 @@ const ShopFilterBar = ({
               </select>
             </HStack>
 
-            <HStack>
-              <Text fontSize="20px" color="black">Sort by</Text>
-              {/* --- NATIVE SELECT FOR SORT --- */}
-              <select
-                style={{
-                  background: "#B88E2F",
-                  height: "45px",
-                  width: "150px",
-                  padding: "0 10px",
-                  border: "none"
-                }}
+            <HStack spacing={3}>
+              <Text fontSize={{ base: "16px", md: "18px" }} color="black" whiteSpace="nowrap">Sort by</Text>
+              <select 
+                style={{ ...selectStyle, width: "140px" }}
                 onChange={(e) => setSortType(e.target.value)}
               >
                 <option value="default">Default</option>
                 <option value="price-low">Price: Low to High</option>
                 <option value="price-high">Price: High to Low</option>
+                {/* RESTORED: Sorting by Rating/Reviews */}
                 <option value="rating">Best Rating</option>
               </select>
             </HStack>
-          </HStack>
+          </Flex>
+
         </Flex>
       </Container>
     </Box>
