@@ -9,8 +9,10 @@ import Cart from "./pages/Cart.jsx";
 import Navbar from "./websiteComponents/navbar.jsx";
 import Footer from "./websiteComponents/Footer.jsx";
 import ProductDetail from "./websiteComponents/ProductDetail.jsx";
-import ContactInfo from "./websiteComponents/ContactInfo.jsx";
+import Contact from "./pages/Contact";
 import Wishlist from "./Pages/Wishlist.jsx";
+import Checkout from "./pages/Checkout";
+import OrderSummaryPage from "./pages/OrderSummaryPage";
 
 function App() {
   return (
@@ -23,9 +25,11 @@ function App() {
           <Route path="/shop" element={<Shop />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/:id" element={<ProductDetail />} />
-          <Route path="/contact" element={<ContactInfo />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<Home />} />
           <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-summary" element={<OrderSummaryPage />} />
         </Routes>
         <Footer />
       </Router>

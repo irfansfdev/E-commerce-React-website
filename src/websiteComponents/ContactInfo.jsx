@@ -12,7 +12,7 @@ const ContactInfo = () => {
       {/* --- Hero Section --- */}
       <Box
         h="316px"
-        bgImage="url('/src/assets/Rectangle 1.png')" 
+        bgImage="url('/src/assets/Rectangle.png')" 
         bgSize="cover"
         bgPos="center"
         display="flex"

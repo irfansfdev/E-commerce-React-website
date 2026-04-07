@@ -1,8 +1,9 @@
+import React from "react";
 import ContactInfo from "../websiteComponents/ContactInfo"
 
-const Home = () => (
+const Contact = () => (
   <>
     <ContactInfo/>
   </>
 );
-export default Home;
+export default Contact;

@@ -150,7 +150,7 @@ const ProductDetail = () => {
             <Button variant="outline" color="black" border="1px solid black" borderRadius="15px" h="60px" px="48px" _hover={{ bg: "black", color: "white" }} onClick={handleAddToCart}>
               Add To Cart
             </Button>
-            <Button variant="outline" color={isWished ? "white" : "black"} bg={isWished ? "black" : "transparent"} border="1px solid black" borderRadius="15px" h="60px" px="48px" onClick={handleWishlist}>
+            <Button variant="outline" color={isWished ? "white" : "black"} bg={isWished ? "black" : "transparent"} border="1px solid black" borderRadius="15px" h="60px" px="48px"  _hover={{ bg: "black", color: "white" }} onClick={handleWishlist}>
               {isWished ? "❤️ Wishlisted" : "Add to Wishlist"}
             </Button>
           </HStack>
