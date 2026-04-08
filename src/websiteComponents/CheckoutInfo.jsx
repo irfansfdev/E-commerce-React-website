@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 import { ChevronRight } from "lucide-react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
-// Import the v3 toaster
 import { toaster } from "@/components/ui/toaster";
 
 const CheckoutInfo = () => {
@@ -15,7 +14,6 @@ const CheckoutInfo = () => {
   const cartItems = useSelector((state) => state.cart.items);
   const [paymentMethod, setPaymentMethod] = useState("bank-transfer");
 
-  // SECURITY CHECK: Redirect if not logged in
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
     
@@ -29,7 +27,6 @@ const CheckoutInfo = () => {
     }
   }, [navigate]);
 
-  // State to capture billing info
   const [billingDetails, setBillingDetails] = useState({
     firstName: "",
     lastName: "",
@@ -54,7 +51,6 @@ const CheckoutInfo = () => {
       return;
     }
 
-    // Validation check for basic fields
     if (!billingDetails.firstName || !billingDetails.email || !billingDetails.address) {
       toaster.create({
         title: "Missing Information",

@@ -31,7 +31,6 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
-    // We don't remove furniro_user so they can log back in easily later
     navigate("/");
     window.location.reload(); 
   };

@@ -14,7 +14,7 @@ import {
   HStack,
   VStack,
   Icon,
-  Flex, // <--- Add this!
+  Flex, 
 } from "@chakra-ui/react";
 import { MdShare, MdCompareArrows, MdFavoriteBorder } from "react-icons/md";
 
@@ -106,7 +106,6 @@ const ShopProductGrid = ({ sortType, productsPerPage, category }) => {
                 </Stack>
               </Box>
 
-              {/* --- HOVER OVERLAY (The "Furniro" effect) --- */}
               <Box
                 position="absolute"
                 top="0"
@@ -177,18 +176,16 @@ const ShopProductGrid = ({ sortType, productsPerPage, category }) => {
               bg={currentPage === i + 1 ? "#B88E2F" : "#F9F1E7"}
               color={currentPage === i + 1 ? "white" : "black"}
               borderRadius="10px"
-              // Responsive sizing for the circles
               w={{ base: "45px", md: "55px" }}
               h={{ base: "45px", md: "55px" }}
               fontSize={{ base: "14px", md: "18px" }}
-              flexShrink={0} // Prevents buttons from squashing
+              flexShrink={0} 
               _hover={{ bg: "#B88E2F", color: "white" }}
             >
               {i + 1}
             </Button>
           ))}
           
-          {/* Optional "Next" button that matches the design */}
           {currentPage < totalPages && (
             <Button
               onClick={() => {

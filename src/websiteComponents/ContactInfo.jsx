@@ -9,7 +9,6 @@ import FeatureBar from "../websiteComponents/FeatureBar";
 const ContactInfo = () => {
   return (
     <Box bg="white">
-      {/* --- Hero Section --- */}
       <Box
         h="316px"
         bgImage="url('/src/assets/Rectangle.png')" 

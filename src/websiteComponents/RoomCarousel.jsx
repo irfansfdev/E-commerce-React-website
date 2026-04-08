@@ -20,7 +20,6 @@ const InspirationSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    // Fetching from furniture category for high-quality interior shots
     fetch("https://dummyjson.com/products/category/furniture?limit=8")
       .then((res) => res.json())
       .then((data) => {
@@ -44,16 +43,13 @@ const InspirationSection = () => {
 
   return (
     <Box bg="#FCF8F3" py={{ base: "40px", md: "80px" }} overflow="hidden">
-      {/* This Flex uses a large left padding to keep the text aligned 
-        while allowing the right side to expand to the edge.
-      */}
+      
       <Flex
         direction={{ base: "column", lg: "row" }}
         align="center"
         pl={{ base: "20px", md: "50px", lg: "100px", xl: "150px" }}
         gap={10}
       >
-        {/* LEFT CONTENT: FIXED WIDTH TEXT */}
         <VStack
           align={{ base: "center", lg: "flex-start" }}
           spacing={6}
@@ -88,7 +84,6 @@ const InspirationSection = () => {
           </Button>
         </VStack>
 
-        {/* RIGHT SLIDER: BLEEDS TO THE RIGHT EDGE */}
         <Flex
           flex="1"
           position="relative"
@@ -97,7 +92,6 @@ const InspirationSection = () => {
           w="full"
           overflow="visible"
         >
-          {/* 1. ACTIVE SLIDE (Tallest) */}
           <Box
             position="relative"
             flex="0 0 auto"
@@ -105,14 +99,13 @@ const InspirationSection = () => {
             h={{ base: "400px", md: "582px" }}
           >
             <Image
-              src={currentProduct?.images?.[0]} // High-res image
+              src={currentProduct?.images?.[0]} 
               w="full"
               h="full"
               objectFit="cover"
               alt="Active"
             />
 
-            {/* OVERLAY BOX */}
             <Box
               position="absolute"
               bottom="24px"
@@ -156,14 +149,13 @@ const InspirationSection = () => {
             </Box>
           </Box>
 
-          {/* 2. NEXT SLIDE (Shorter) */}
           <Box
             flex="0 0 auto"
             w={{ base: "280px", md: "372px" }}
             h={{ base: "350px", md: "486px" }}
           >
             <Image
-              src={nextProduct?.images?.[0]} // High-res image
+              src={nextProduct?.images?.[0]} 
               w="full"
               h="full"
               objectFit="cover"
@@ -171,7 +163,6 @@ const InspirationSection = () => {
             />
           </Box>
 
-          {/* 3. PARTIAL THIRD SLIDE (Infinite Bleed Effect) */}
           <Box
             flex="0 0 auto"
             w="200px"

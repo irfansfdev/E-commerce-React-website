@@ -26,7 +26,6 @@ const Wishlist = () => {
     }));
 
     dispatch(toggleWishlist(product)); // Remove from wishlist after adding
-    // toaster.create({ title: "Moved to Cart", type: "success" });
   };
 
   if (wishlist.length === 0) {
@@ -65,7 +64,6 @@ const Wishlist = () => {
               _hover={{ transform: "translateY(-5px)", boxShadow: "sm" }}
             >
               <Box position="relative">
-                {/* Image fix for clarity */}
                 <Image 
                   src={product.images?.[0] || product.thumbnail} 
                   h="250px" 

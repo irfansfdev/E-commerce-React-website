@@ -6,7 +6,6 @@ import {
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 
-// Import the toaster from your local UI snippets
 import { toaster } from "@/components/ui/toaster";
 
 const AuthInfo = ({ mode }) => {
@@ -36,7 +35,6 @@ const AuthInfo = ({ mode }) => {
       if (savedUser && savedUser.email === formData.email && savedUser.password === formData.password) {
         localStorage.setItem("isLoggedIn", "true");
         
-        // NEW V3 TOAST LOGIC
         toaster.create({
           title: "Welcome back!",
           description: `Logged in as ${savedUser.firstName}`,

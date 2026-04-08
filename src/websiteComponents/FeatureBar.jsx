@@ -1,7 +1,5 @@
 import React from "react";
 import { Box, Flex, Text, Stack, SimpleGrid, Center } from "@chakra-ui/react";
-// Using react-icons/hi2 or md as a fallback if lucide gives you trouble, 
-// but sticking to your lucide icons here with a safety check.
 import { Trophy, BadgeCheck, Truck, Headphones } from "lucide-react";
 
 const FeatureBar = () => {
@@ -37,7 +35,6 @@ const FeatureBar = () => {
     >
       <Container maxW="1440px" px={0}>
         <SimpleGrid 
-          // 1 column on tiny phones, 2 columns on tablets, 4 on desktop
           columns={{ base: 1, sm: 2, lg: 4 }} 
           spacingY={{ base: "40px", lg: "0" }}
           spacingX="20px"
@@ -78,7 +75,6 @@ const FeatureBar = () => {
   );
 };
 
-// Added Container to the import list if you haven't already
 import { Container } from "@chakra-ui/react";
 
 export default FeatureBar;

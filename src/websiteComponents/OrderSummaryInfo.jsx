@@ -1,5 +1,4 @@
 import React from "react";
-// Change Divider to Separator here
 import { Box, Container, VStack, Heading, Text, Flex, Button, Separator, HStack, Icon, Center } from "@chakra-ui/react"; 
 import { CheckCircle } from "lucide-react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
@@ -31,7 +30,6 @@ const OrderSummaryInfo = () => {
              <Text fontWeight="bold" color="black" mb={2}>Order Details</Text>
              <Text color="#9F9F9F" fontSize="sm" mb={4}>Order ID: {order.orderNumber}</Text>
              
-             {/* Use Separator instead of Divider */}
              <Separator mb={4} borderColor="#D9D9D9" /> 
              
              {order.items.map((item) => (
@@ -41,7 +39,6 @@ const OrderSummaryInfo = () => {
                </Flex>
              ))}
              
-             {/* Use Separator instead of Divider */}
              <Separator my={4} borderColor="#D9D9D9" />
              
              <Flex justify="space-between">

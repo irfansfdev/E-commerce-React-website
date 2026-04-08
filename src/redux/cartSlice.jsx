@@ -21,14 +21,11 @@ const cartSlice = createSlice({
 
       if (existingItem) {
         if (updateQuantity) {
-          // If coming from Cart page: SET the exact number
           existingItem.quantity = quantity;
         } else {
-          // If coming from Product page: ADD to the current number
           existingItem.quantity += quantity;
         }
       } else {
-        // New item: Add to array
         state.items.push(action.payload);
       }
     },

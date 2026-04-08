@@ -38,12 +38,10 @@ const ShopFilterBar = ({
         <Flex
           justify="space-between"
           align="center"
-          // Stacks the two groups on mobile, keeps them side-by-side on desktop
           direction={{ base: "column", lg: "row" }}
           gap={6}
         >
           
-          {/* LEFT GROUP: Filter, Icons, Category, Results */}
           <Flex 
             align="center" 
             gap={{ base: 3, md: 6 }} 
@@ -83,7 +81,6 @@ const ShopFilterBar = ({
             </Text>
           </Flex>
 
-          {/* RIGHT GROUP: Show and Sort */}
           <Flex 
             gap={{ base: 4, md: 6 }} 
             align="center" 

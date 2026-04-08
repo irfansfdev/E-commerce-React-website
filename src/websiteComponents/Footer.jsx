@@ -79,7 +79,6 @@ const Footer = () => {
           </VStack>
         </SimpleGrid>
 
-        {/* Custom Divider Line (Replacement for Chakra Divider) */}
         <Box w="100%" h="1px" bg="#D8D8D8" mb={8} />
         
         <Text fontSize="16px" color="black">

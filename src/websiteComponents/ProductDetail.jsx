@@ -3,21 +3,7 @@ import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, toggleWishlist } from "../redux/cartSlice";
 
-import {
-  Box,
-  Flex,
-  Image,
-  Text,
-  Stack,
-  Button,
-  HStack,
-  Center,
-  Spinner,
-  Grid,
-  Circle,
-  Heading,
-  SimpleGrid,
-  Container,
+import { Box, Flex, Image, Text, Stack, Button, HStack, Center, Spinner, Grid, Circle, Heading, SimpleGrid, Container,
 } from "@chakra-ui/react";
 
 import { toaster } from "@/components/ui/toaster";
@@ -113,7 +99,6 @@ const ProductDetail = () => {
 
   return (
     <Box bg="white" color="black" pb="100px">
-      {/* 1. BREADCRUMBS */}
       <Box bg="#F9F1E7" py="30px" mb="40px">
         <Container maxW="1280px">
           <HStack color="#9F9F9F" fontSize={{ base: "14px", md: "16px" }}>
@@ -267,7 +252,7 @@ const ProductDetail = () => {
               </Text>
             </HStack>
 
-            {/* 2. Add To Cart - The PRIMARY button (Takes more space) */}
+            {/* 2. Add To Cart - The PRIMARY button  */}
             <Button
               variant="outline"
               color="black"
@@ -275,7 +260,7 @@ const ProductDetail = () => {
               borderRadius="15px"
               h="60px"
               fontSize="18px"
-              flex={{ base: "none", sm: "2" }} // Takes double the space of compare on desktop
+              flex={{ base: "none", sm: "2" }} 
               width="100%"
               _hover={{ bg: "black", color: "white" }}
               onClick={handleAddToCart}
@@ -283,7 +268,6 @@ const ProductDetail = () => {
               Add To Cart
             </Button>
 
-            {/* 3. Compare/Wishlist - The SECONDARY button (More compact) */}
             <Button
               variant="outline"
               color="black"
@@ -291,7 +275,7 @@ const ProductDetail = () => {
               borderRadius="15px"
               h="60px"
               fontSize="18px"
-              flex={{ base: "none", sm: "1" }} // Smaller width than Add to Cart
+              flex={{ base: "none", sm: "1" }} 
               width="100%"
               _hover={{ bg: "black", color: "white" }}
               onClick={handleWishlist}
@@ -302,7 +286,6 @@ const ProductDetail = () => {
 
           <Box h="1px" bg="#D9D9D9" my={8} />
 
-          {/* RESTORED: Metadata & Social Icons */}
           <Grid
             templateColumns="100px 1fr"
             gap={3}
@@ -462,7 +445,6 @@ const ProductDetail = () => {
         </Container>
       </Box>
 
-      {/* 4. RESTORED: RELATED PRODUCTS SECTION */}
       <Box mt="40px" pb="80px" pt="40px" borderTop="1px solid #D9D9D9">
         <Container maxW="1280px">
           <Heading textAlign="center" mb="40px" fontSize="36px">

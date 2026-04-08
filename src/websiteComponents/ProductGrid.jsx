@@ -40,13 +40,11 @@ const ProductGrid = () => {
         {products.slice(0, visible).map((product) => {
           const hasDiscount = product.discountPercentage > 5;
           
-          // Currency Logic
           const priceInRp = (product.price * 1000).toLocaleString('id-ID');
           const oldPriceRaw = (product.price / (1 - product.discountPercentage / 100)) * 1000;
           const oldPriceInRp = Math.round(oldPriceRaw).toLocaleString('id-ID');
 
           return (
-            /* ADDED STATE PROP HERE */
             <Link 
               key={product.id} 
               to={`/product/${product.id}`} 
