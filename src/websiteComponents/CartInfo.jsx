@@ -67,19 +67,19 @@ const CartInfo = () => {
                       <Image src={item.images?.[0] || item.thumbnail} maxH="80px" objectFit="contain" />
                     </Center>
                     <VStack align="start" spacing={1}>
-                      <Text fontWeight="500" fontSize="16px">{item.title}</Text>
+                      <Text fontWeight="500" fontSize="16px" color="black">{item.title}</Text>
                       <HStack fontSize="13px" color="#9F9F9F">
                         <Text>Size: {item.selectedSize || 'N/A'}</Text>
                         <Circle size="10px" bg={item.selectedColor || 'black'} border="1px solid #ddd" />
                       </HStack>
-                      <Text color="#9F9F9F" fontSize="14px">Rs. {(Number(item.price) * 1000).toLocaleString()}</Text>
+                      <Text color="#9F9F9F" fontSize="14px" >Rs. {(Number(item.price) * 1000).toLocaleString()}</Text>
                       <Flex w="100%" justify="space-between" align="center" pt={2}>
-                        <HStack border="1px solid #9F9F9F" borderRadius="5px" px={2} h="32px" w="80px" justify="space-between">
-                          <Text cursor="pointer" fontWeight="bold" onClick={() => handleUpdateQty(item, -1)}>-</Text>
+                        <HStack color="black" border="1px solid #9F9F9F" borderRadius="5px" px={2} h="32px" w="80px" justify="space-between">
+                          <Text cursor="pointer" color="black" fontWeight="bold" onClick={() => handleUpdateQty(item, -1)}>-</Text>
                           <Text fontWeight="600">{item.quantity}</Text>
-                          <Text cursor="pointer" fontWeight="bold" onClick={() => handleUpdateQty(item, 1)}>+</Text>
+                          <Text cursor="pointer" fontWeight="bold"  onClick={() => handleUpdateQty(item, 1)}>+</Text>
                         </HStack>
-                        <Text fontWeight="600" color="black">Rs. {(Number(item.price) * 1000 * item.quantity).toLocaleString()}</Text>
+                        <Text fontWeight="600" color="black" ml="20px">Rs. {(Number(item.price) * 1000 * item.quantity).toLocaleString()}</Text>
                       </Flex>
                     </VStack>
                     <Icon as={MdDelete} color="#B88E2F" cursor="pointer" boxSize="22px" onClick={() => dispatch(removeFromCart(item))} />
@@ -102,12 +102,12 @@ const CartInfo = () => {
                     <Text flex="1" textAlign="center" color="#9F9F9F">Rs. {(Number(item.price) * 1000).toLocaleString()}</Text>
                     <HStack flex="1" justify="center">
                       <HStack border="1px solid #9F9F9F" borderRadius="5px" px={3} h="35px">
-                        <Text cursor="pointer" fontWeight="bold" onClick={() => handleUpdateQty(item, -1)}>-</Text>
-                        <Text fontWeight="600">{item.quantity}</Text>
-                        <Text cursor="pointer" fontWeight="bold" onClick={() => handleUpdateQty(item, 1)}>+</Text>
+                        <Text cursor="pointer" fontWeight="bold" color="black" onClick={() => handleUpdateQty(item, -1)}>-</Text>
+                        <Text fontWeight="600" color="black">{item.quantity}</Text>
+                        <Text cursor="pointer" fontWeight="bold" color="black" onClick={() => handleUpdateQty(item, 1)}>+</Text>
                       </HStack>
                     </HStack>
-                    <Text flex="1" textAlign="center" fontWeight="500">Rs. {(Number(item.price) * 1000 * item.quantity).toLocaleString()}</Text>
+                    <Text flex="1" textAlign="center" fontWeight="500" color="black">Rs. {(Number(item.price) * 1000 * item.quantity).toLocaleString()}</Text>
                     <Box w="40px" textAlign="right"><Icon as={MdDelete} color="#B88E2F" cursor="pointer" boxSize="24px" onClick={() => dispatch(removeFromCart(item))} /></Box>
                   </Flex>
                 </Box>
@@ -116,9 +116,9 @@ const CartInfo = () => {
 
             {/* Totals Box */}
             <Box bg="#F9F1E7" w={{ base: "100%", lg: "393px" }} p="40px" textAlign="center">
-              <Heading fontSize="32px" mb="60px">Cart Totals</Heading>
-              <Flex justify="space-between" mb="30px"><Text fontWeight="600">Subtotal</Text><Text color="#9F9F9F">Rs. {(subtotal * 1000).toLocaleString()}</Text></Flex>
-              <Flex justify="space-between" mb="60px"><Text fontWeight="600">Total</Text><Text color="#B88E2F" fontSize="20px" fontWeight="600">Rs. {(subtotal * 1000).toLocaleString()}</Text></Flex>
+              <Heading fontSize="32px" mb="60px" color="black">Cart Totals</Heading>
+              <Flex justify="space-between" mb="30px"><Text fontWeight="600" color="black">Subtotal</Text><Text color="#9F9F9F">Rs. {(subtotal * 1000).toLocaleString()}</Text></Flex>
+              <Flex justify="space-between" mb="60px"><Text fontWeight="600" color="black">Total</Text><Text color="#B88E2F" fontSize="20px" fontWeight="600">Rs. {(subtotal * 1000).toLocaleString()}</Text></Flex>
               <Button as={RouterLink} to="/checkout" variant="outline" border="1.5px solid black" w="222px" h="59px" borderRadius="15px" color="black" _hover={{ bg: "black", color: "white" }}>Check Out</Button>
             </Box>
           </Flex>

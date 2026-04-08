@@ -1,18 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box, Container, Flex, Heading, Text, VStack, HStack,
-  Input, Button, Image, Icon, Center
+  Input, Button, Image, Icon
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { ChevronRight } from "lucide-react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
+
+// Import the v3 toaster
+import { toaster } from "@/components/ui/toaster";
 
 const CheckoutInfo = () => {
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.items);
   const [paymentMethod, setPaymentMethod] = useState("bank-transfer");
 
-  // State to capture billing info for the summary page
+  // SECURITY CHECK: Redirect if not logged in
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    
+    if (!isLoggedIn) {
+      toaster.create({
+        title: "Authentication Required",
+        description: "Please login to access the checkout page.",
+        type: "warning",
+      });
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  // State to capture billing info
   const [billingDetails, setBillingDetails] = useState({
     firstName: "",
     lastName: "",
@@ -29,11 +46,24 @@ const CheckoutInfo = () => {
 
   const handlePlaceOrder = () => {
     if (cartItems.length === 0) {
-      alert("Your cart is empty!");
+      toaster.create({
+        title: "Empty Cart",
+        description: "You cannot place an order with an empty cart.",
+        type: "error",
+      });
       return;
     }
 
-    // This data is passed to the next page via "state"
+    // Validation check for basic fields
+    if (!billingDetails.firstName || !billingDetails.email || !billingDetails.address) {
+      toaster.create({
+        title: "Missing Information",
+        description: "Please fill in the required billing details.",
+        type: "warning",
+      });
+      return;
+    }
+
     const orderSummaryData = {
       items: cartItems,
       total: subtotal,
@@ -42,6 +72,12 @@ const CheckoutInfo = () => {
       orderNumber: `ORD-${Math.floor(Math.random() * 1000000)}`,
       date: new Date().toLocaleDateString()
     };
+
+    toaster.create({
+      title: "Order Processed",
+      description: "Redirecting to order summary...",
+      type: "success",
+    });
 
     navigate("/order-summary", { state: { order: orderSummaryData } });
   };
@@ -72,24 +108,24 @@ const CheckoutInfo = () => {
               <HStack spacing="30px">
                 <Box flex="1">
                   <Text mb="2" fontWeight="500" color="black">First Name </Text>
-                  <Input h="75px" borderRadius="10px" color="black" border="1px solid #9F9F9F" onChange={(e) => handleInputChange(e, 'firstName')} />
+                  <Input h="75px" borderRadius="10px" color="black" border="1px solid #9F9F9F" px={4} onChange={(e) => handleInputChange(e, 'firstName')} />
                 </Box>
                 <Box flex="1">
                   <Text mb="2" fontWeight="500" color="black">Last Name </Text>
-                  <Input h="75px" borderRadius="10px" color="black" border="1px solid #9F9F9F" onChange={(e) => handleInputChange(e, 'lastName')} />
+                  <Input h="75px" borderRadius="10px" color="black" border="1px solid #9F9F9F" px={4} onChange={(e) => handleInputChange(e, 'lastName')} />
                 </Box>
               </HStack>
               
-              <Box><Text mb="2" color="black">Country / Region *</Text><Input h="75px" color="black" borderRadius="10px" border="1px solid #9F9F9F" placeholder="Sri Lanka" /></Box>
-              <Box><Text mb="2" color="black">Street address *</Text><Input h="75px" color="black" borderRadius="10px" border="1px solid #9F9F9F" onChange={(e) => handleInputChange(e, 'address')} /></Box>
-              <Box><Text mb="2" color="black">Town / City *</Text><Input h="75px" color="black" borderRadius="10px" border="1px solid #9F9F9F" /></Box>
-              <Box><Text mb="2" color="black">Phone *</Text><Input h="75px" color="black" borderRadius="10px" border="1px solid #9F9F9F" onChange={(e) => handleInputChange(e, 'phone')} /></Box>
-              <Box><Text mb="2" color="black">Email address *</Text><Input h="75px" color="black" borderRadius="10px" border="1px solid #9F9F9F" onChange={(e) => handleInputChange(e, 'email')} /></Box>
-              <Input h="75px" borderRadius="10px" border="1px solid #9F9F9F" color="black" placeholder="Additional Information" />
+              <Box><Text mb="2" color="black">Country / Region *</Text><Input h="75px" color="black" borderRadius="10px" border="1px solid #9F9F9F" px={4} placeholder="Sri Lanka" /></Box>
+              <Box><Text mb="2" color="black">Street address *</Text><Input h="75px" color="black" borderRadius="10px" border="1px solid #9F9F9F" px={4} onChange={(e) => handleInputChange(e, 'address')} /></Box>
+              <Box><Text mb="2" color="black">Town / City *</Text><Input h="75px" color="black" borderRadius="10px" border="1px solid #9F9F9F" px={4} /></Box>
+              <Box><Text mb="2" color="black">Phone *</Text><Input h="75px" color="black" borderRadius="10px" border="1px solid #9F9F9F" px={4} onChange={(e) => handleInputChange(e, 'phone')} /></Box>
+              <Box><Text mb="2" color="black">Email address *</Text><Input h="75px" color="black" borderRadius="10px" border="1px solid #9F9F9F" px={4} onChange={(e) => handleInputChange(e, 'email')} /></Box>
+              <Input h="75px" borderRadius="10px" border="1px solid #9F9F9F" color="black" px={4} placeholder="Additional Information" />
             </VStack>
           </Box>
 
-          {/* Order Summary (Sidebar View) */}
+          {/* Order Summary */}
           <Box flex="1" py="20px">
             <Flex justify="space-between" mb="20px" borderBottom="1px solid #eee" pb={4}>
               <Text fontSize="24px" fontWeight="500" color="black">Product</Text>

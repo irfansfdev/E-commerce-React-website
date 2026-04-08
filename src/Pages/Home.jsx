@@ -1,14 +1,14 @@
 import Header from "../websiteComponents/Header";
 import ProductGrid from "../websiteComponents/ProductGrid";
-import RoomCarousel from "../websiteComponents/RoomCarousel";
-import FuniroGallery from "../websiteComponents/FuniroGallery";
+import InspirationSection from "../websiteComponents/InspirationSection";
+import FuniroFurnitureCollage from "../websiteComponents/FuniroFurnitureCollage";
 
 const Home = () => (
   <>
     <Header />
     <ProductGrid />
-    <RoomCarousel />
-    <FuniroGallery />
+    <InspirationSection />
+    <FuniroFurnitureCollage />
   </>
 );
 export default Home;

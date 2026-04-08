@@ -5,10 +5,8 @@ import {
 import { useSelector } from "react-redux";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
-// Icons
-import { MdPersonOutline, MdSearch, MdFavoriteBorder, MdOutlineShoppingCart, MdClose, MdMenu } from "react-icons/md";
+import { MdPersonOutline, MdSearch, MdFavoriteBorder, MdOutlineShoppingCart, MdClose, MdMenu, MdLogout } from "react-icons/md";
 
-// UI Components
 import {
   DialogBody, DialogContent, DialogHeader, DialogRoot, DialogTrigger, DialogBackdrop, DialogCloseTrigger,
 } from "@/components/ui/dialog";
@@ -26,6 +24,17 @@ const Navbar = () => {
 
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
   const wishlistCount = wishlistItems.length;
+
+  // AUTH LOGIC
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const userData = JSON.parse(localStorage.getItem("furniro_user") || "{}");
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    // We don't remove furniro_user so they can log back in easily later
+    navigate("/");
+    window.location.reload(); 
+  };
 
   useEffect(() => {
     if (searchQuery.trim().length < 2) { setResults([]); return; }
@@ -47,9 +56,8 @@ const Navbar = () => {
     { name: "Contact", path: "/contact" }
   ];
 
-  // Hover style helper to prevent the black background
   const iconHoverStyle = {
-    bg: "transparent", // Fixes the black background issue
+    bg: "transparent",
     color: "#B88E2F",
     transform: "scale(1.1)",
     transition: "0.2s"
@@ -76,28 +84,14 @@ const Navbar = () => {
             <RouterLink to="/">
               <HStack spacing={2} align="center">
                 <Image src="/src/assets/Meubel House_Logos-05.png" alt="Logo" h={{ base: "24px", md: "32px" }} />
-                <Heading 
-                  display={{ base: "none", md: "block" }} 
-                  fontSize="30px" 
-                  fontWeight="700" 
-                  color="black"
-                >
-                  Furniro
-                </Heading>
+                <Heading display={{ base: "none", md: "block" }} fontSize="30px" fontWeight="700" color="black">Furniro</Heading>
               </HStack>
             </RouterLink>
           </HStack>
 
           <HStack as="ul" listStyleType="none" gap="50px" display={{ base: "none", md: "flex" }}>
             {navLinks.map((link) => (
-              <Box 
-                as={RouterLink} 
-                to={link.path} 
-                key={link.name} 
-                fontWeight="500" 
-                color="black" 
-                _hover={{ color: "#B88E2F", textDecoration: "none" }}
-              >
+              <Box as={RouterLink} to={link.path} key={link.name} fontWeight="500" color="black" _hover={{ color: "#B88E2F", textDecoration: "none" }}>
                 {link.name}
               </Box>
             ))}
@@ -105,14 +99,21 @@ const Navbar = () => {
 
           <HStack spacing={{ base: "2px", md: "20px" }}>
             
-            <IconButton 
-               as={RouterLink} to="/login" 
-               variant="ghost" color="black" 
-               p={{ base: "4px", md: "8px" }}
-               _hover={iconHoverStyle}
-            >
-              <MdPersonOutline size="28px" />
-            </IconButton>
+            {/* AUTH SECTION */}
+            {isLoggedIn ? (
+              <HStack spacing={2}>
+                <Text fontSize="14px" fontWeight="600" color="black" display={{ base: "none", lg: "block" }}>
+                  Hi, {userData.firstName}
+                </Text>
+                <IconButton variant="ghost" color="black" p={{ base: "4px", md: "8px" }} _hover={{ color: "red.500" }} onClick={handleLogout} title="Logout">
+                  <MdLogout size="26px" />
+                </IconButton>
+              </HStack>
+            ) : (
+              <IconButton as={RouterLink} to="/login" variant="ghost" color="black" p={{ base: "4px", md: "8px" }} _hover={iconHoverStyle}>
+                <MdPersonOutline size="28px" />
+              </IconButton>
+            )}
 
             <DialogRoot open={isSearchOpen} onOpenChange={(e) => setIsSearchOpen(e.open)}>
               <DialogTrigger asChild>
@@ -174,8 +175,8 @@ const Navbar = () => {
       {isSidebarOpen && (
         <>
           <Box position="fixed" top="0" left="0" w="100vw" h="100vh" bg="blackAlpha.700" zIndex="1100" onClick={() => setIsSidebarOpen(false)} />
-          <Box position="fixed" top="0" left="0" w="280px" h="100vh" bg="white" zIndex="1200" p={6} boxShadow="2xl" animation="slideIn 0.3s ease-out">
-            <VStack align="stretch" spacing={8}>
+          <Box position="fixed" top="0" left="0" w="280px" h="100vh" bg="white" zIndex="1200" p={6} boxShadow="2xl">
+            <VStack align="stretch" spacing={8} h="100%">
               <Flex justify="space-between" align="center">
                 <HStack>
                   <Image src="/src/assets/Meubel House_Logos-05.png" h="24px" />
@@ -184,13 +185,30 @@ const Navbar = () => {
                 <IconButton variant="ghost" _hover={{ bg: "transparent", color: "#B88E2F" }} onClick={() => setIsSidebarOpen(false)}><MdClose size="28px" /></IconButton>
               </Flex>
               <Separator />
-              <VStack align="start" spacing={6} pl={2}>
+              <VStack align="start" spacing={6} pl={2} flex={1}>
                 {navLinks.map((link) => (
                   <Box as={RouterLink} to={link.path} key={link.name} fontSize="18px" fontWeight="500" color="black" w="100%" onClick={() => setIsSidebarOpen(false)} _hover={{ color: "#B88E2F" }}>
                     {link.name}
                   </Box>
                 ))}
               </VStack>
+
+              <Box pt={4} borderTop="1px solid #eee">
+                {isLoggedIn ? (
+                  <VStack align="start" spacing={4}>
+                    <Text fontWeight="600" color="#B88E2F">Hi, {userData.firstName}</Text>
+                    <HStack spacing={3} cursor="pointer" onClick={handleLogout} _hover={{ color: "red.500" }}>
+                      <MdLogout size="24px" />
+                      <Text fontWeight="500">Logout</Text>
+                    </HStack>
+                  </VStack>
+                ) : (
+                  <HStack as={RouterLink} to="/login" spacing={3} p={2} onClick={() => setIsSidebarOpen(false)} _hover={{ color: "#B88E2F" }}>
+                    <MdPersonOutline size="24px" />
+                    <Text fontWeight="500">Login / Register</Text>
+                  </HStack>
+                )}
+              </Box>
             </VStack>
           </Box>
         </>
