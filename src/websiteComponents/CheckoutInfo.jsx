@@ -3,20 +3,22 @@ import {
   Box, Container, Flex, Heading, Text, VStack, HStack,
   Input, Button, Image, Icon
 } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux"; // Added useDispatch
 import { ChevronRight } from "lucide-react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
+
+import { clearCart } from "../redux/cartSlice"; 
 
 import { toaster } from "@/components/ui/toaster";
 
 const CheckoutInfo = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // Initialize dispatch
   const cartItems = useSelector((state) => state.cart.items);
   const [paymentMethod, setPaymentMethod] = useState("bank-transfer");
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    
     if (!isLoggedIn) {
       toaster.create({
         title: "Authentication Required",
@@ -45,7 +47,7 @@ const CheckoutInfo = () => {
     if (cartItems.length === 0) {
       toaster.create({
         title: "Empty Cart",
-        description: "You cannot place an order with an empty cart.",
+        description: "Your cart is already empty.",
         type: "error",
       });
       return;
@@ -60,8 +62,9 @@ const CheckoutInfo = () => {
       return;
     }
 
+    // Capture the data BEFORE clearing the cart
     const orderSummaryData = {
-      items: cartItems,
+      items: [...cartItems], // Create a copy so it persists in the summary
       total: subtotal,
       paymentMethod: paymentMethod,
       customer: billingDetails,
@@ -69,12 +72,16 @@ const CheckoutInfo = () => {
       date: new Date().toLocaleDateString()
     };
 
+    // 2. Clear the Redux Cart immediately
+    dispatch(clearCart());
+
     toaster.create({
       title: "Order Processed",
       description: "Redirecting to order summary...",
       type: "success",
     });
 
+    // 3. Navigate to summary with the captured order data
     navigate("/order-summary", { state: { order: orderSummaryData } });
   };
 
@@ -121,7 +128,7 @@ const CheckoutInfo = () => {
             </VStack>
           </Box>
 
-          {/* Order Summary */}
+          {/* Order Summary Sidebar */}
           <Box flex="1" py="20px">
             <Flex justify="space-between" mb="20px" borderBottom="1px solid #eee" pb={4}>
               <Text fontSize="24px" fontWeight="500" color="black">Product</Text>
@@ -148,12 +155,6 @@ const CheckoutInfo = () => {
                 <Text fontWeight="500" color={paymentMethod === "bank-transfer" ? "black" : "#9F9F9F"}>Direct Bank Transfer</Text>
               </HStack>
               
-              {paymentMethod === "bank-transfer" && (
-                <Text color="#9F9F9F" fontSize="14px" pl="30px" textAlign="justify">
-                  Make your payment directly into our bank account. Please use your Order ID as the payment reference.
-                </Text>
-              )}
-
               <HStack cursor="pointer" onClick={() => setPaymentMethod("cod")}>
                 <Box border="1px solid #9F9F9F" borderRadius="full" boxSize="18px" display="flex" alignItems="center" justifyContent="center">
                   {paymentMethod === "cod" && <Box bg="black" borderRadius="full" boxSize="10px" />}
@@ -161,10 +162,6 @@ const CheckoutInfo = () => {
                 <Text fontWeight="500" color={paymentMethod === "cod" ? "black" : "#9F9F9F"}>Cash On Delivery</Text>
               </HStack>
             </VStack>
-
-            <Text mt="20px" fontSize="14px" color="black">
-                Your personal data will be used to support your experience throughout this website... <b>Privacy Policy.</b>
-            </Text>
 
             <Button 
                 onClick={handlePlaceOrder}

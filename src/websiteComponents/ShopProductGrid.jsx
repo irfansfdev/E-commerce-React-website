@@ -1,20 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
-  Button,
-  Box,
-  Container,
-  SimpleGrid,
-  Image,
-  Text,
-  Stack,
-  Badge,
-  Center,
-  Spinner,
-  HStack,
-  VStack,
-  Icon,
-  Flex, 
+  Button, Box, Container, SimpleGrid, Image, Text, Stack, Badge, Center, Spinner, HStack, VStack, Icon, Flex,
 } from "@chakra-ui/react";
 import { MdShare, MdCompareArrows, MdFavoriteBorder } from "react-icons/md";
 
